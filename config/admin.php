@@ -2,7 +2,7 @@
 return [
     // PARAMTROS DE LA APP
     'app' => [
-        'name' => 'DevAPP',
+        'name' => 'Pasanaco App',
         'logo' => '/images/logo.png',
         'favicon' => '/images/logo.png',
     ],
