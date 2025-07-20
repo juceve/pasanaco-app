@@ -13,7 +13,7 @@ class GroupCrud extends Component
     public $search = '';
     public $sortField = 'id';
     public $sortDirection = 'desc';
-    public $perPage = 10;
+    public $perPage = 5;
 
     public $groupId;
     public $name, $start_date, $frequency = 'monthly', $custom_days_interval, $day_of_week, $day_of_month, $amount_per_participant, $status = 'in_progress';
@@ -79,38 +79,28 @@ class GroupCrud extends Component
     {
         $this->validate([
             'name' => 'required|string|max:255',
-            'start_date' => 'required|date',
-            'frequency' => 'required|in:DIARIO,SEMANAL,MENSUAL,PERSONALIZABLE',
-            'amount_per_participant' => 'required|numeric|min:1',
+            'amount_per_participant' => 'required|numeric|min:0',
         ]);
 
         PasanacoGroup::create([
             'name' => $this->name,
-            'start_date' => $this->start_date,
-            'frequency' => $this->frequency,
-
             'amount_per_participant' => $this->amount_per_participant,
-            'status' => 'ACTIVO',
+            'status' => 'CREADO',
         ]);
 
         $this->showModal = false;
         $this->resetForm();
-        return redirect()->route('groups')->with('success','Grupo creado correctamente.');
+        return redirect()->route('groups')->with('success', 'Grupo creado correctamente.');
     }
 
     public function update()
     {
         $this->validate([
             'name' => 'required|string|max:255',
-            'start_date' => 'required|date',
-            'frequency' => 'required|in:DIARIO,SEMANAL,MENSUAL,PERSONALIZABLE',
-            'amount_per_participant' => 'required|numeric|min:1',
         ]);
 
         PasanacoGroup::findOrFail($this->groupId)->update([
             'name' => $this->name,
-            'start_date' => $this->start_date,
-            'frequency' => $this->frequency,
             'amount_per_participant' => $this->amount_per_participant,
             'status' => $this->status,
         ]);
@@ -118,7 +108,7 @@ class GroupCrud extends Component
         $this->showModal = false;
         $this->isEditing = false;
         $this->resetForm();
-        $this->dispatch('toast-success','Grupo editado correctamente.');
+        $this->dispatch('toast-success', 'Grupo editado correctamente.');
     }
 
     public function resetForm()

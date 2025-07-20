@@ -1,20 +1,16 @@
-<div>
+<div class="max-w-9xl mx-auto p-6 ">
     <div class="flex items-center justify-between p-1 mb-2">
         <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
-           Grupos
+            Grupos
         </h1>
-        <button onclick="history.back()"
-            class="bg-sky-600 hover:bg-sky-700 text-white font-semibold px-4 py-1 rounded focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm"
-            aria-label="Volver">
-            <i class="fas fa-arrow-left mr-1 text-sm"></i> Volver
-        </button>
     </div>
-    <div class="max-w-7xl mx-auto p-6 bg-white rounded-lg shadow-md dark:bg-gray-800 dark:text-gray-200">
+    <div class="p-6 bg-white rounded-lg shadow-md dark:bg-gray-800 dark:text-gray-200">
 
         {{-- Títulos y botón Nuevo --}}
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
             <div>
-                <h5 class="title-h5 mb-0 text-gray-600 dark:text-gray-400">Gestión de grupos, cronogramas y participantes</h5>
+                <h5 class="title-h5 mb-0 text-sky-700 dark:text-gray-400">Gestión de grupos, cronogramas y participantes
+                </h5>
             </div>
             <button wire:click="create"
                 class="mt-3 sm:mt-0 inline-flex items-center justify-center w-full sm:w-auto px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-md text-sm font-semibold transition text-center dark:bg-sky-700 dark:hover:bg-sky-800"
@@ -33,7 +29,7 @@
                         <line x1="21" y1="21" x2="16.65" y2="16.65" />
                     </svg>
                 </span>
-                <input type="search" wire:model.debounce.500ms="search"
+                <input type="search" wire:model.live.debounce.500ms="search"
                     placeholder="Buscar grupo por nombre o estado..."
                     class="pl-10 pr-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 w-full placeholder-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-sky-500">
             </div>
@@ -41,9 +37,11 @@
                 <label for="perPage" class="text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">Filas:</label>
                 <select id="perPage" wire:model="perPage"
                     class="border-gray-300 rounded-md text-sm focus:ring-sky-500 focus:border-sky-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-sky-500">
-                    <option value="2">2</option>
+
                     <option value="5">5</option>
                     <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
                 </select>
             </div>
         </div>
@@ -106,10 +104,12 @@
                                 </span>
                             @endif
                         </th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-300 uppercase tracking-wider">
+                        <th
+                            class="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-300 uppercase tracking-wider">
                             Estado
                         </th>
-                        <th class="px-6 py-4 text-right text-sm font-semibold text-gray-900 dark:text-gray-300 uppercase tracking-wider">
+                        <th
+                            class="px-6 py-4 text-right text-sm font-semibold text-gray-900 dark:text-gray-300 uppercase tracking-wider">
                         </th>
                     </tr>
                 </thead>
@@ -120,12 +120,35 @@
                             <td class="px-6 py-4 whitespace-nowrap dark:text-gray-300">{{ $group->name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap dark:text-gray-300">
                                 {{ \Carbon\Carbon::parse($group->start_date)->format('d/m/Y') }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap capitalize dark:text-gray-300">{{ $group->frequency }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap capitalize dark:text-gray-300">
+                                @if ($group->frequency)                                   
+                                        {{ $group->frequency }}
+                                @else
+                                     <span
+                                        class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-200">
+                                        <svg class="w-3 h-3 mr-1 text-gray-400 dark:text-gray-300" fill="currentColor"
+                                            viewBox="0 0 20 20">
+                                            <circle cx="10" cy="10" r="10" />
+                                        </svg>
+                                        No definido
+                                    </span>
+                                @endif</td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                @if ($group->status === 'ACTIVO')
+                                @if ($group->status === 'CREADO')
                                     <span
                                         class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-sky-100 text-sky-800 dark:bg-sky-900 dark:text-sky-200">
-                                        <svg class="w-3 h-3 mr-1 text-sky-500 dark:text-sky-400" fill="currentColor" viewBox="0 0 20 20">
+                                        <svg class="w-3 h-3 mr-1 text-sky-500 dark:text-sky-400" fill="currentColor"
+                                            viewBox="0 0 20 20">
+                                            <circle cx="10" cy="10" r="10" />
+                                        </svg>
+                                        Creado
+                                    </span>
+                                @endif
+                                @if ($group->status === 'EN PROGRESO')
+                                    <span
+                                        class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                        <svg class="w-3 h-3 mr-1 text-green-500 dark:text-green-400" fill="currentColor"
+                                            viewBox="0 0 20 20">
                                             <circle cx="10" cy="10" r="10" />
                                         </svg>
                                         En proceso
@@ -134,7 +157,8 @@
                                 @if ($group->status === 'COMPLETADO')
                                     <span
                                         class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-200">
-                                        <svg class="w-3 h-3 mr-1 text-gray-400 dark:text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+                                        <svg class="w-3 h-3 mr-1 text-gray-400 dark:text-gray-300" fill="currentColor"
+                                            viewBox="0 0 20 20">
                                             <circle cx="10" cy="10" r="10" />
                                         </svg>
                                         Completado
@@ -143,7 +167,8 @@
                                 @if ($group->status === 'ANULADO')
                                     <span
                                         class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-200">
-                                        <svg class="w-3 h-3 mr-1 text-red-400 dark:text-red-300" fill="currentColor" viewBox="0 0 20 20">
+                                        <svg class="w-3 h-3 mr-1 text-red-400 dark:text-red-300" fill="currentColor"
+                                            viewBox="0 0 20 20">
                                             <circle cx="10" cy="10" r="10" />
                                         </svg>
                                         Anulado
@@ -151,46 +176,61 @@
                                 @endif
                             </td>
                             <td align="right" class="px-6 py-4 whitespace-nowrap">
-                                {{-- OPCIONES --}}
-                                <button id="ddb{{ $group->id }}" data-dropdown-toggle="dropdown{{ $group->id }}"
-                                    class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-1.5 text-center inline-flex items-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-                                    type="button">
-                                    Opciones
-                                    <i class="fas fa-chevron-down ml-2"></i>
-                                </button>
-
-                                <!-- Dropdown menu -->
-                                <div id="dropdown{{ $group->id }}"
-                                    class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600">
-                                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200 text-left"
-                                        aria-labelledby="ddb{{ $group->id }}">
-                                        <li>
+                                <div x-data="{
+                                    open: false,
+                                    menuStyle: '',
+                                    toggleDropdown($el) {
+                                        this.open = !this.open;
+                                        if (this.open) {
+                                            this.$nextTick(() => {
+                                                const rect = $el.getBoundingClientRect();
+                                                const menuHeight = 180; // px
+                                                let top = rect.bottom;
+                                                let left = rect.right - 176; // ancho del menú (w-44 = 176px)
+                                                // Si no hay espacio abajo, mostrar arriba
+                                                if (window.innerHeight - rect.bottom < menuHeight) {
+                                                    top = rect.top - menuHeight;
+                                                }
+                                                this.menuStyle = `top:${top}px;left:${left}px;min-width:176px;`;
+                                            });
+                                        }
+                                    }
+                                }" class="relative inline-block text-left">
+                                    <button @click="toggleDropdown($el)"
+                                        class="cursor-pointer text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-1.5 text-center inline-flex items-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                                        aria-haspopup="true" :aria-expanded="open">
+                                        Opciones
+                                        <i class="fas fa-chevron-down ml-2"></i>
+                                    </button>
+                                    <div x-show="open" @click.away="open = false" x-transition :style="menuStyle"
+                                        class="fixed z-50 origin-top-right rounded-md shadow-lg bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5">
+                                        <div class="py-1">
                                             <a href="javascript:void(0)" wire:click="edit({{ $group->id }})"
-                                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                @click="open = false"
+                                                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600">
                                                 <i class="fas fa-edit mr-1"></i> Editar
                                             </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ route('groups.settings', $group->id) }}"
-                                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                            <a href="{{ route('groups.settings', $group->id) }}" @click="open = false"
+                                                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600">
                                                 <i class="fas fa-sliders-h mr-1"></i> Configuraciones
                                             </a>
-                                        </li>
-                                        <li>
                                             <a href="javascript:void(0)"
                                                 onclick="confirmarEliminacion({{ $group->id }}, 'deleteGroup')"
-                                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                @click="open = false"
+                                                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600">
                                                 <i class="fas fa-trash mr-1"></i> Eliminar
                                             </a>
-                                        </li>
-                                    </ul>
+                                        </div>
+                                    </div>
                                 </div>
                                 {{-- FIN OPCIONES --}}
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center py-10 text-gray-400 dark:text-gray-500 italic">No hay grupos registrados.</td>
+                            <td colspan="6" class="text-center py-10 text-gray-400 dark:text-gray-500 italic">No
+                                hay
+                                grupos registrados.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -219,7 +259,7 @@
                         &times;
                     </button>
                     <h4 class="text-lg font-semibold mb-4 text-sky-700 dark:text-sky-400">
-                        {{ $isEditing ? 'Editar participante' : 'Registrar nuevo participante' }}
+                        {{ $isEditing ? 'Editar Grupo' : 'Registrar nuevo grupo' }}
                     </h4>
                     <form wire:submit.prevent="{{ $isEditing ? 'update' : 'store' }}">
                         <div class="mb-3">
@@ -231,17 +271,9 @@
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
                             @enderror
                         </div>
-                        <div class="mb-3">
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Fecha Inicio</label>
-                            <input type="date" wire:model.defer="start_date"
-                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm placeholder-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
-                                required>
-                            @error('start_date')
-                                <span class="text-red-500 text-xs">{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Monto cuota</label>
+                         <div class="mb-3">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Monto
+                                cuota</label>
                             <input type="number" step="any" wire:model.defer="amount_per_participant"
                                 placeholder="0.00"
                                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm placeholder-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400">
@@ -249,8 +281,20 @@
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
                             @enderror
                         </div>
+                        {{-- <div class="mb-3">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Fecha
+                                Inicio</label>
+                            <input type="date" wire:model.defer="start_date"
+                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm placeholder-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
+                                required>
+                            @error('start_date')
+                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                            @enderror
+                        </div>
+                       
                         <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Frecuencia de cobro</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Frecuencia de
+                                cobro</label>
                             <select wire:model.defer="frequency"
                                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                 required>
@@ -261,15 +305,17 @@
                             </select>
                             @error('frequency')
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
-                            @enderror
-                        </div>
+                            @enderror 
+                        </div>--}}
                         @if ($isEditing)
                             <div class="mb-4">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Estado</label>
+                                <label
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Estado</label>
                                 <select wire:model.defer="status"
                                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     required>
-                                    <option value="ACTIVO">Activo</option>
+                                    <option value="CREADO">Creado</option>
+                                    <option value="EN PROGRESO">En progreso</option>
                                     <option value="COMPLETADO">Completado</option>
                                     <option value="ANULADO">Anulado</option>
                                 </select>

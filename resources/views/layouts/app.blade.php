@@ -28,6 +28,7 @@
 
     <!-- Styles -->
     @livewireStyles
+    @yield('css')
 </head>
 
 
@@ -137,11 +138,15 @@
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.dispatch(eventoLivewire, { id: id });
+                    Livewire.dispatch(eventoLivewire, {
+                        id: id
+                    });
                 }
             });
         }
     </script>
+@yield('js')
+
 </body>
 
 </html>

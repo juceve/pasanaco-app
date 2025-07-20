@@ -55,4 +55,9 @@ class PasanacoGroup extends Model
         return $this->hasMany(\App\Models\PasanacoSchedule::class, 'id', 'pasanaco_group_id');
     }
     
+    public function pasanacoGroupDates()
+    {
+        return $this->hasMany(\App\Models\PasanacoGroupDate::class, 'pasanaco_group_id', 'id');
+    }
+    
 }

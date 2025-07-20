@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('pasanaco_group_id')->constrained()->cascadeOnDelete();
             $table->foreignId('participant_id')->constrained()->cascadeOnDelete();
+            $table->integer('cantidad')->nullable();
             $table->enum('status', ['active', 'removed'])->default('active');
             $table->text('removal_reason')->nullable();
             $table->timestamp('joined_at')->nullable();

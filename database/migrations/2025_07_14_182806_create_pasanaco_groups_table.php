@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('pasanaco_groups', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->date('start_date');
-            $table->enum('frequency', ['daily', 'weekly', 'monthly', 'custom']);
+            $table->date('start_date')->nullable();
+            $table->enum('frequency', ['DIARIO', 'SEMANAL', 'MENSUAL', 'PERSONALIZABLE'])->nullable();
             $table->integer('custom_days_interval')->nullable(); // Solo si frequency == custom
             $table->string('day_of_week')->nullable(); // Solo si weekly
             $table->integer('day_of_month')->nullable(); // Solo si monthly
-            $table->decimal('amount_per_participant', 10, 2);
-            $table->enum('status', ['in_progress', 'completed'])->default('in_progress');
+            $table->decimal('amount_per_participant', 10, 2)->nullable();
+            $table->enum('status', ['CREADO', 'EN PROGRESO','COMPLETADO','ANULADO'])->default('CREADO');
             $table->unsignedTinyInteger('progress_percent')->default(0); // 0 a 100
             $table->json('settings')->nullable(); // JSON para futura extensión
             $table->timestamps();

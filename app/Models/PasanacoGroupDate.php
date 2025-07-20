@@ -5,15 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class PasanacoGroupParticipant
+ * Class PasanacoGroupDate
  *
  * @property $id
  * @property $pasanaco_group_id
  * @property $participant_id
- * @property $status
- * @property $removal_reason
- * @property $joined_at
- * @property $removed_at
+ * @property $date
  * @property $created_at
  * @property $updated_at
  *
@@ -22,7 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
-class PasanacoGroupParticipant extends Model
+class PasanacoGroupDate extends Model
 {
     
     protected $perPage = 20;
@@ -32,7 +29,7 @@ class PasanacoGroupParticipant extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['pasanaco_group_id', 'participant_id', 'cantidad', 'status', 'removal_reason', 'joined_at', 'removed_at'];
+    protected $fillable = ['pasanaco_group_id', 'participant_id', 'date'];
 
 
     /**
